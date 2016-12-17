@@ -28,7 +28,12 @@ class SanatImport extends Maintenance {
 			$filename = $entry->getFilename();
 
 			$text = file_get_contents( "$source/$filename" );
-			$title = Title::newFromText( strtr( $filename, '_', '/' ) );
+			$text = UtfNormal\Validator::cleanUp( $text );
+
+			$titletext = strtr( $filename, '_', '/' );
+			$titletext = UtfNormal\Validator::cleanUp( $titletext );
+			$title = Title::newFromText( $titletext );
+
 			$content = ContentHandler::makeContent( $text, $title );
 
 			$page = new WikiPage( $title );
