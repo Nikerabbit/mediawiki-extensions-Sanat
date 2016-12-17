@@ -1,0 +1,16 @@
+{
+	"name": "Sanat",
+	"version": "1.0.0",
+	"author": [
+		"Niklas Laxström"
+	],
+	"url": "https://github.com/Nikerabbit/mediawiki-extensions-Sanat",
+	"description": "Supporting code for sanat.csc.fi",
+	"license-name": "GPL-2.0+",
+	"MessagesDirs": {
+		"Sanat": [
+			"i18n"
+		]
+	},
+	"manifest_version": 1
+}
