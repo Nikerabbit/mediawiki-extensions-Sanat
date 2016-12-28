@@ -11,7 +11,7 @@ require_once "$IP/maintenance/Maintenance.php";
 class SanatImport extends Maintenance {
 	public function __construct() {
 		parent::__construct();
-		$this->mDescription = 'Imports infra pages to files';
+		$this->mDescription = 'Imports infra pages from files';
 		$this->addArg( 'source', 'Source directory' );
 	}
 
@@ -33,6 +33,9 @@ class SanatImport extends Maintenance {
 			$titletext = strtr( $filename, '_', '/' );
 			$titletext = UtfNormal\Validator::cleanUp( $titletext );
 			$title = Title::newFromText( $titletext );
+			if ( !$title ) {
+				die( "Invalid title from '$filename'" );
+			}
 
 			$content = ContentHandler::makeContent( $text, $title );
 
