@@ -40,7 +40,7 @@ class SanatImport extends Maintenance {
 			$content = ContentHandler::makeContent( $text, $title );
 
 			$page = new WikiPage( $title );
-			$page->doEditContent( $content, '', false, $user );
+			$page->doEditContent( $content, '', false, false, $user );
 
 			$this->output( ".", 'progress' );
 		}
