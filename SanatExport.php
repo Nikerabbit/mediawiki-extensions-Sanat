@@ -12,33 +12,23 @@ class SanatExport extends Maintenance {
 	public function __construct() {
 		parent::__construct();
 		$this->mDescription = 'Exports infra pages to files';
-		$this->addArg( 'target', 'Target directory' );
+		$this->addOption( 'category', 'Export pages from this category', true, true );
+		$this->addOption( 'target', 'Target directory', false, true );
 	}
 
 	public function execute() {
-		$target = $this->getArg( 0 );
+		$target = $this->getOption( 'target', '.' );
 
-		$db = wfGetDB( DB_SLAVE );
-		$res = $db->select(
-			array( 'page' ),
-			Revision::selectPageFields(),
-			array(
-				'page_namespace' => array(
-					106, // Form
-					102, // Property
-					NS_TEMPLATE,
-					NS_CATEGORY,
-				)
-			),
-			__METHOD__
-		);
+		$category = Category::newFromName( $this->getOption( 'category' ) );
+		$titles = $category->getMembers();
 
-		foreach ( $res as $row ) {
-			$title = Title::newFromRow( $row );
+		foreach ( $titles as $title ) {
 			$revision = Revision::newFromTitle( $title );
 			$content = $revision->getContent();
 			$text = ContentHandler::getContentText( $content );
-			file_put_contents( "$target/{$title->getPrefixedText()}", $text );
+			$filename = $title->getPrefixedText();
+			$filename = strtr( $filename, '/', '_' );
+			file_put_contents( "$target/$filename", $text );
 		}
 	}
 }
