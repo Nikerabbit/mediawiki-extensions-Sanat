@@ -6,7 +6,7 @@
 	],
 	"url": "https://github.com/Nikerabbit/mediawiki-extensions-Sanat",
 	"description": "Supporting code for sanat.csc.fi",
-	"license-name": "GPL-2.0+",
+	"license-name": "GPL-2.0-or-later",
 	"MessagesDirs": {
 		"Sanat": [
 			"i18n"
