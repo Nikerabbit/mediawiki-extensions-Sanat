@@ -11,7 +11,7 @@ require_once "$IP/maintenance/Maintenance.php";
 class SanatImport extends Maintenance {
 	public function __construct() {
 		parent::__construct();
-		$this->mDescription = 'Imports infra pages from files';
+		$this->mDescription = 'Imports pages from files in a directory';
 		$this->addOption( 'threads', 'Import in parallel' );
 		$this->addArg( 'source', 'Source directory' );
 	}
@@ -90,7 +90,7 @@ class SanatImport extends Maintenance {
 		$content = ContentHandler::makeContent( $text, $title );
 
 		$page = new WikiPage( $title );
-		$page->doEditContent( $content, '', false, false, $user );
+		$page->doEditContent( $content, '', 0, false, $user );
 
 		$this->output( ".", 'progress' );
 	}
