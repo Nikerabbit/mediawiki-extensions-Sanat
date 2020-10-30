@@ -5,6 +5,9 @@
  * @file
  */
 
+use MediaWiki\MediaWikiServices;
+use MediaWiki\Revision\SlotRecord;
+
 $IP = getenv( 'MW_INSTALL_PATH' ) ?: '.';
 require_once "$IP/maintenance/Maintenance.php";
 
@@ -17,14 +20,16 @@ class SanatExport extends Maintenance {
 	}
 
 	public function execute() {
+		$revisionStore = MediaWikiServices::getInstance()->getRevisionStore();
+
 		$target = $this->getOption( 'target', '.' );
 
 		$category = Category::newFromName( $this->getOption( 'category' ) );
 		$titles = $category->getMembers();
 
 		foreach ( $titles as $title ) {
-			$revision = Revision::newFromTitle( $title );
-			$content = $revision->getContent();
+			$revisionRecord = $revisionStore->getRevisionByTitle( $title );
+			$content = $revisionRecord->getContent( SlotRecord::MAIN );
 			$text = ContentHandler::getContentText( $content );
 			$filename = $title->getPrefixedText();
 			$filename = strtr( $filename, '/', '_' );
