@@ -1,22 +1,26 @@
 <?php
+declare( strict_types=1 );
+
+use MediaWiki\MediaWikiServices;
+use MediaWiki\Revision\SlotRecord;
+
+$env = getenv( 'MW_INSTALL_PATH' );
+$IP = $env !== false ? $env : __DIR__ . '/../..';
+require_once "$IP/maintenance/Maintenance.php";
+
 /**
  * @author Niklas Laxström
  * @license MIT
- * @file
  */
-
-$IP = getenv( 'MW_INSTALL_PATH' ) ?: '.';
-require_once "$IP/maintenance/Maintenance.php";
-
 class SanatImport extends Maintenance {
 	public function __construct() {
 		parent::__construct();
-		$this->mDescription = 'Imports pages from files in a directory';
+		$this->addDescription( 'Imports pages from files in a directory' );
 		$this->addOption( 'threads', 'Import in parallel' );
 		$this->addArg( 'source', 'Source directory' );
 	}
 
-	public function execute() {
+	public function execute(): void {
 		$threads = $this->getOption( 'threads', 1 );
 		if ( $threads < 1 || $threads != intval( $threads ) ) {
 			$this->output( "Invalid thread count specified; running single-threaded.\n" );
@@ -28,7 +32,7 @@ class SanatImport extends Maintenance {
 		}
 
 		$filenames = iterator_to_array( $this->getFilenames() );
-		$chunks = array_chunk( $filenames, ceil( count( $filenames ) / $threads ) );
+		$chunks = array_chunk( $filenames, (int)ceil( count( $filenames ) / $threads ) );
 
 		$pids = [];
 		foreach ( $chunks as $chunk ) {
@@ -76,25 +80,29 @@ class SanatImport extends Maintenance {
 	}
 
 	private function doWork( string $filename ): void {
+		$wikiPageFactory = MediaWikiServices::getInstance()->getWikiPageFactory();
+
 		$user = User::newFromId( 1 );
 		$text = file_get_contents( $filename );
 		$text = UtfNormal\Validator::cleanUp( $text );
 
-		$titletext = strtr( basename( $filename ), '_', '/' );
-		$titletext = UtfNormal\Validator::cleanUp( $titletext );
-		$title = Title::newFromText( $titletext );
+		$titleText = strtr( basename( $filename ), '_', '/' );
+		$titleText = UtfNormal\Validator::cleanUp( $titleText );
+		$title = Title::newFromText( $titleText );
 		if ( !$title ) {
 			die( "Invalid title from '$filename'" );
 		}
 
+		$page = $wikiPageFactory->newFromTitle( $title );
 		$content = ContentHandler::makeContent( $text, $title );
 
-		$page = new WikiPage( $title );
-		$page->doEditContent( $content, '', 0, false, $user );
+		$page->newPageUpdater( $user )
+			->setContent( SlotRecord::MAIN, $content )
+			->saveRevision( CommentStoreComment::newUnsavedComment( '' ) );
 
 		$this->output( ".", 'progress' );
 	}
 }
 
-$maintClass = 'SanatImport';
+$maintClass = SanatImport::class;
 require_once RUN_MAINTENANCE_IF_MAIN;

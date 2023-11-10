@@ -1,6 +1,6 @@
 {
 	"name": "Sanat",
-	"version": "1.1.0+20200626",
+	"version": "2.0.0+20231110",
 	"author": [
 		"Niklas Laxström"
 	],
@@ -12,5 +12,5 @@
 			"i18n"
 		]
 	},
-	"manifest_version": 1
+	"manifest_version": 2
 }
