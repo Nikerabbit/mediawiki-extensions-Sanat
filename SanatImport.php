@@ -81,8 +81,9 @@ class SanatImport extends Maintenance {
 
 	private function doWork( string $filename ): void {
 		$wikiPageFactory = MediaWikiServices::getInstance()->getWikiPageFactory();
+		$userFactory = MediaWikiServices::getInstance()->getUserFactory();
 
-		$user = User::newFromId( 1 );
+		$user = $userFactory->newFromId( 1 );
 		$text = file_get_contents( $filename );
 		$text = UtfNormal\Validator::cleanUp( $text );
 
@@ -100,7 +101,7 @@ class SanatImport extends Maintenance {
 			->setContent( SlotRecord::MAIN, $content )
 			->saveRevision( CommentStoreComment::newUnsavedComment( '' ) );
 
-		$this->output( ".", 'progress' );
+		$this->output( '.', 'progress' );
 	}
 }
 
