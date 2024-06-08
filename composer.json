@@ -19,5 +19,10 @@
 		"phan": [
 			"phan -d . -p --allow-polyfill-parser"
 		]
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
 	}
 }
