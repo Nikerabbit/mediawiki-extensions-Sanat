@@ -22,7 +22,8 @@
 		],
 		"phan": [
 			"phan -d . -p --allow-polyfill-parser"
-		]
+		],
+		"rector": "rector"
 	},
 	"config": {
 		"allow-plugins": {
