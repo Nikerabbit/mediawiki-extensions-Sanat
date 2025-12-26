@@ -1,9 +1,10 @@
 <?php
-declare( strict_types=1 );
+declare( strict_types = 1 );
 
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Title\Title;
+use UtfNormal\Validator;
 
 $env = getenv( 'MW_INSTALL_PATH' );
 $IP = $env !== false ? $env : __DIR__ . '/../..';
@@ -86,10 +87,10 @@ class SanatImport extends Maintenance {
 
 		$user = $userFactory->newFromId( 1 );
 		$text = file_get_contents( $filename );
-		$text = UtfNormal\Validator::cleanUp( $text );
+		$text = Validator::cleanUp( $text );
 
 		$titleText = strtr( basename( $filename ), '_', '/' );
-		$titleText = UtfNormal\Validator::cleanUp( $titleText );
+		$titleText = Validator::cleanUp( $titleText );
 		$title = Title::newFromText( $titleText );
 		if ( !$title ) {
 			die( "Invalid title from '$filename'" );

@@ -9,7 +9,4 @@ return RectorConfig::configure()
 		__DIR__
 	] )
 	->withSkipPath( 'vendor' )
-	->withPhpSets()
-	->withTypeCoverageLevel( 0 )
-	->withDeadCodeLevel( 0 )
-	->withCodeQualityLevel( 0 );
+	->withPhpSets();
