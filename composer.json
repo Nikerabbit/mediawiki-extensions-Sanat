@@ -1,6 +1,6 @@
 {
 	"require": {
-		"php": ">=8.3"
+		"php": ">=8.4"
 	},
 	"require-dev": {
 		"mediawiki/mediawiki-codesniffer": "v52.0.1",
@@ -28,7 +28,7 @@
 			"dealerdirect/phpcodesniffer-composer-installer": true
 		},
 		"platform": {
-			"php": "8.3.0"
+			"php": "8.4.0"
 		}
 	},
 	"name": "mediawiki/sanat",
