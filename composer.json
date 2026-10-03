@@ -20,14 +20,19 @@
 			"parallel-lint . --exclude vendor --exclude node_modules",
 			"phpcs -p -s"
 		],
-		"phan": [
-			"phan -d . -p --allow-polyfill-parser"
-		],
+		"phan": "phan -d . --long-progress-bar",
 		"rector": "rector"
 	},
 	"config": {
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true
+		},
+		"platform": {
+			"php": "8.3.0"
 		}
-	}
+	},
+	"name": "mediawiki/sanat",
+	"type": "mediawiki-extension",
+	"description": "Supporting code for sanat.csc.fi",
+	"license": "GPL-2.0-or-later"
 }
