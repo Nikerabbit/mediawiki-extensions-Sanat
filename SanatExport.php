@@ -2,6 +2,8 @@
 declare( strict_types=1 );
 
 use MediaWiki\Category\Category;
+use MediaWiki\Content\TextContent;
+use MediaWiki\Maintenance\Maintenance;
 use MediaWiki\MediaWikiServices;
 use MediaWiki\Revision\SlotRecord;
 

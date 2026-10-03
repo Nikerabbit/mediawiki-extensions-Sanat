@@ -12,5 +12,11 @@
 			"i18n"
 		]
 	},
-	"manifest_version": 2
+	"manifest_version": 2,
+	"requires": {
+		"MediaWiki": ">= 1.45.0",
+		"platform": {
+			"php": ">= 8.4.0"
+		}
+	}
 }
