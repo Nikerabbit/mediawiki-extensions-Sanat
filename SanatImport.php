@@ -31,6 +31,7 @@ class SanatImport extends Maintenance {
 			$this->output( "Invalid thread count specified; running single-threaded.\n" );
 			$threads = 1;
 		}
+
 		if ( $threads > 1 && !function_exists( 'pcntl_fork' ) ) {
 			$this->output( "PHP pcntl extension is not present; running single-threaded.\n" );
 			$threads = 1;
@@ -43,18 +44,18 @@ class SanatImport extends Maintenance {
 		foreach ( $chunks as $chunk ) {
 			// Do not fork for only one thread
 			$pid = ( $threads > 1 ) ? pcntl_fork() : -1;
-
 			if ( $pid === 0 ) {
 				// Child, reseed because there is no bug in PHP:
 				// https://bugs.php.net/bug.php?id=42465
 				mt_srand( getmypid() );
-
 				foreach ( $chunk as $filename ) {
 					$this->doWork( $filename );
 				}
 
 				exit( 0 );
-			} elseif ( $pid === -1 ) {
+			}
+
+			if ( $pid === -1 ) {
 				foreach ( $chunk as $filename ) {
 					$this->doWork( $filename );
 				}
@@ -63,6 +64,7 @@ class SanatImport extends Maintenance {
 				$pids[] = $pid;
 			}
 		}
+
 		// Wait for all children
 		foreach ( $pids as $pid ) {
 			$status = 0;
@@ -94,6 +96,7 @@ class SanatImport extends Maintenance {
 
 		$titleText = strtr( basename( $filename ), '_', '/' );
 		$titleText = Validator::cleanUp( $titleText );
+
 		$title = Title::newFromText( $titleText );
 		if ( !$title ) {
 			die( "Invalid title from '$filename'" );
